@@ -1,6 +1,9 @@
 package com.xzx.crawler.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.io.Serializable;
 
@@ -9,7 +12,10 @@ import java.io.Serializable;
  * @author 
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Article implements Serializable {
+
     private Long id;
 
     private String title;
@@ -20,5 +26,6 @@ public class Article implements Serializable {
 
     private String url;
 
-    private static final long serialVersionUID = 1L;
+    private Long taskId;
+
 }

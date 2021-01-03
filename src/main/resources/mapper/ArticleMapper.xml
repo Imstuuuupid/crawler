@@ -7,9 +7,10 @@
     <result column="author" jdbcType="VARCHAR" property="author" />
     <result column="desc" jdbcType="VARCHAR" property="desc" />
     <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="task_id" jdbcType="BIGINT" property="taskId" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, title, author, `desc`, url
+    id, title, author, `desc`, url , task_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -23,9 +24,9 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xzx.crawler.entity.Article" useGeneratedKeys="true">
     insert into article (title, author, `desc`,
-      url)
+      url,task_id)
     values (#{title,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, #{desc,jdbcType=VARCHAR}, 
-      #{url,jdbcType=VARCHAR})
+      #{url,jdbcType=VARCHAR},#{taskId,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xzx.crawler.entity.Article" useGeneratedKeys="true">
     insert into article
@@ -42,6 +43,9 @@
       <if test="url != null">
         url,
       </if>
+      <if test="taskId != null">
+        taskId,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="title != null">
@@ -55,6 +59,9 @@
       </if>
       <if test="url != null">
         #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null">
+        #{taskId,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -73,6 +80,9 @@
       <if test="url != null">
         url = #{url,jdbcType=VARCHAR},
       </if>
+      <if test="taskId != null">
+        #{taskId,jdbcType=BIGINT},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -81,7 +91,8 @@
     set title = #{title,jdbcType=VARCHAR},
       author = #{author,jdbcType=VARCHAR},
       `desc` = #{desc,jdbcType=VARCHAR},
-      url = #{url,jdbcType=VARCHAR}
+      url = #{url,jdbcType=VARCHAR},
+      taskId = #{taskId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

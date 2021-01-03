@@ -12,3 +12,9 @@ mybatis:
   mapper-locations: classpath*:mapper/*.xml
   type-aliases-package: com.xzx.crawler.dao
 
+processor:
+  limit: 3
+  task-id: 'taskId'
+  number: 'count'
+  process: 'process'
+
