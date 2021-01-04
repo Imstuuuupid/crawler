@@ -32,6 +32,5 @@ public class HitsTests {
         hits.addEdge(3,1);
         hits.addEdge(3,2);
         hits.addEdge(3,0);
-        hits.printResultPage();
     }
 }

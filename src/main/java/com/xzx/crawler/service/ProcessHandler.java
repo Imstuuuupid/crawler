@@ -21,5 +21,13 @@ public interface ProcessHandler {
      */
     List<Process> findEdges(List<Process> processList);
 
+    /**
+     *
+     * @author xzx
+     * @date 2021/01/04 10:10
+     * @param processList
+     * @return java.util.List<com.xzx.crawler.entity.Process>
+     */
+    List<Process> runHits(List<Process> processList);
 
 }

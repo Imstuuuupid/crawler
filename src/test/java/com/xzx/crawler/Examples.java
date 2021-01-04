@@ -33,9 +33,15 @@ public class Examples {
     @Test
     public void collectionsTest(){
         Set<String> a = new HashSet<>();
-        a.add("a");
-        a.add("b");
-        a.add("c");
+        a.add("abc");
+        a.add("bc");
+        a.add("cdd");
+
+        String str= "aaaabbbbdddccdddabc";
+        for (String b : a ) {
+            System.out.println(b);
+            System.out.println(str.contains(b));
+        }
 
     }
 

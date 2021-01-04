@@ -42,14 +42,28 @@ public class Process {
 
     private Long taskId;
 
+    private Double authority;
+
+    private Double hub;
+
+    public Process(String title, String author, String desc, String url, Integer count, List<String> webs, Long TASK_ID) {
+        this.title = title;
+        this.author = author;
+        this.desc = desc;
+        this.url = url;
+        this.count = count;
+        this.webs = webs;
+        this.taskId = TASK_ID;
+    }
+
     public void show() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());
         sb.append("[");
-        sb.append("title = ").append(title).append("\r\n");
-        sb.append(",count = ").append(count).append("\r\n");
-        sb.append(",edges = ").append(edges).append("\r\n");
-        sb.append("]");
+        sb.append("count = ").append(count);
+        sb.append(",title = ").append(title);
+        sb.append(",edges = ").append(edges);
+        sb.append("]").append("\r\n");
         System.out.println(sb);
     }
 }

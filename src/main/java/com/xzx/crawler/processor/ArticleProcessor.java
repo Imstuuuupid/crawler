@@ -2,6 +2,8 @@ package com.xzx.crawler.processor;
 
 import com.xzx.crawler.entity.Process;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -10,6 +12,7 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -83,6 +86,7 @@ public class ArticleProcessor implements PageProcessor {
 
     @Override
     public void process(Page page) {
+
 //        抓取需求元素
         analyseElement(page);
 
@@ -102,31 +106,45 @@ public class ArticleProcessor implements PageProcessor {
 
 //        记录当前编号
         Integer number = count;
-//        获取当前页面url
         String url = page.getUrl().toString();
-//        获取当前文章标题
         String title = page.getHtml().xpath("h1[@id=\"articleContentId\"]/text()").get();
-//        获取当前文章作者
         String author = page.getHtml().xpath("a[@class=\"follow-nickName\"]/text()").get();
-//        获取当前文章描述
         String desc = page.getHtml().xpath("meta[@name=\"description\"]/@content").get();
+
 //        获取子网页链接
-        List<String> webs = page.getHtml().xpath(CATCH_ELEMENT).links().regex(URL_REGULAR).all();
+        List<String> webs = null;
+        if (count == 0) {
+            webs = page.getHtml().xpath(INIT_ELEMENT).links().regex(URL_REGULAR).all();
+        } else {
+            webs = page.getHtml().xpath(CATCH_ELEMENT).links().regex(URL_REGULAR).all();
+        }
+        if (CollectionUtils.isNotEmpty(webs)) {
+            webs = webs.stream().distinct().collect(Collectors.toList());
+        }
         page.putField(WEBS, webs);
-
-
-        Process tempProcess = new Process(title, author, desc, url, count, webs,null, TASK_ID);
+        Process tempProcess = new Process(title, author, desc, url, count, webs, TASK_ID);
         page.putField(process, tempProcess);
 
 
-        if (title == null) {
+        if (url == null || !contains(title)) {
             //skip this page
             page.setSkip(true);
         } else {
             count++;
-            log.info("抓取的内容：{}", title);
-            log.info("编号为：{}",count);
         }
+    }
+
+    private Boolean contains(String title) {
+        if (title == null) {
+            return false;
+        }
+        boolean flag = false;
+        for (String key : KEY) {
+            if (title.contains(key)) {
+                return true;
+            }
+        }
+        return flag;
     }
 
     /**
@@ -140,14 +158,6 @@ public class ArticleProcessor implements PageProcessor {
 
 //        获取页面子链接
         List<String> all = page.getResultItems().get(WEBS);
-
-//        初始页面抓取策略
-        if (count == 0) {
-            System.out.println("init！！！");
-            page.addTargetRequests(
-                    page.getHtml().xpath(INIT_ELEMENT).links().regex(URL_REGULAR).all()
-            );
-        }
 //        终止策略
         if (count < LIMIT) {
             page.addTargetRequests(all);

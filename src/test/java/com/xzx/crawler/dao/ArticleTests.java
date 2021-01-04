@@ -66,11 +66,9 @@ public class ArticleTests {
         System.out.println("爬取结束，耗时约" + ((endTime - startTime) / 1000) + "秒，抓取了" + processor.getCount() + "条记录");
         List<Process> res = articlePipline.getRes();
         log.warn("{}", res);
-        System.out.println("===========================");
-
         List<Process> edges = processHandler.findEdges(res);
-        for (Process a : edges) {
-            a.show();
-        }
+        System.out.println("=============================");
+        List<Process> processes = processHandler.runHits(edges);
+        processes.forEach(a-> System.out.println(a.getTitle()));
     }
 }

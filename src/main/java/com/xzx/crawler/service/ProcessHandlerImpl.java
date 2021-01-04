@@ -1,12 +1,15 @@
 package com.xzx.crawler.service;
 
+import com.xzx.crawler.algorithm.Hits;
 import com.xzx.crawler.entity.Process;
 import org.apache.commons.collections.CollectionUtils;
 import org.assertj.core.util.Preconditions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Process处理器的实现类
@@ -15,6 +18,7 @@ import java.util.stream.Collectors;
  */
 @Service
 public class ProcessHandlerImpl implements ProcessHandler {
+
 
     @Override
     public List<Process> findEdges(List<Process> processList) {
@@ -40,5 +44,21 @@ public class ProcessHandlerImpl implements ProcessHandler {
         }
 
         return list;
+    }
+
+    @Override
+    public List<Process> runHits(List<Process> processList) {
+        Preconditions.checkArgument(CollectionUtils.isNotEmpty(processList), "计算完边后的process列表为空");
+        Set<Integer> vertex = processList.stream().map(Process::getCount).collect(Collectors.toSet());
+        Hits hits = new Hits(vertex.size());
+        hits.addVertex(vertex.toArray());
+        for (Process temp : processList) {
+            List<Integer> edges = temp.getEdges();
+            for (Integer edge : edges) {
+                hits.addEdge(temp.getCount(),edge);
+            }
+        }
+        processList = hits.printResultPage(processList);
+        return processList;
     }
 }

@@ -1,10 +1,17 @@
 package com.xzx.crawler.algorithm;
 
+import com.xzx.crawler.entity.Process;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
 /**
  * 网页链接分析hits算法
  * @author xzx
  * @date 2021/01/03 16/19
  */
+@Slf4j
 public class Hits {
     /**
      *  网页个数
@@ -80,7 +87,7 @@ public class Hits {
     /**
      * 输出循环结束后，各网页的权威值和中枢值
      */
-    public void printResultPage() {
+    public List<Process> printResultPage(List<Process> processList) {
         //网页Hub和Authority值的总和，用于后面的归一化计算
         double newSumHub = 0;
         double newSumAuthority = 0;
@@ -122,9 +129,9 @@ public class Hits {
                 }
             }
 
-            System.out.println("第" + t + "次循环");
+            log.info("第" + t + "次循环");
             for (int k = 0; k < pageNum; k++) {
-                System.out.println("网页" + vertices[k] + "：权威值:" + newAuthority[k] + ", 中枢值：" + newHub[k]);
+                log.info("网页" + vertices[k] + "：权威值:" + newAuthority[k] + ", 中枢值：" + newHub[k]);
             }
 
             for (int k = 0; k < pageNum; k++) {
@@ -133,7 +140,7 @@ public class Hits {
                 newSumAuthority += newAuthority[k];
             }
 
-            System.out.println("归一化后");
+            log.info("归一化后");
             error = 0;
             //归一化处理
             for (int k = 0; k < pageNum; k++) {
@@ -142,24 +149,33 @@ public class Hits {
                 newRAuthority[k] = newAuthority[k] / newSumAuthority;
                 //计算g个网页新的Hub和Authority值与上一次值得总误差
                 error += Math.abs(newRHub[k] - rHub[k]) + Math.abs(newRAuthority[k] - rAuthority[k]);
-                System.out.println("网页" + vertices[k] + ":权威值：" + newRAuthority[k] + ", 中枢值:" + newRHub[k]);
+                log.info("网页" + vertices[k] + ":权威值：" + newRAuthority[k] + ", 中枢值:" + newRHub[k]);
 
                 hub[k] = newHub[k];
                 authority[k] = newAuthority[k];
                 rHub[k] = newRHub[k];
                 rAuthority[k] = newRAuthority[k];
             }
-            System.out.println("---------");
+            log.info("---------");
         }
 
-        System.out.println("****最终收敛的网页的权威值和中心值****");
+        log.info("****最终收敛的网页的权威值和中心值****");
         for (int k = 0; k < pageNum; k++) {
-            System.out.println("网页" + vertices[k] + ":权威值:" + authority[k] + ", 中枢值:" + hub[k]);
+            log.info("网页" + vertices[k] + ":权威值:" + authority[k] + ", 中枢值:" + hub[k]);
         }
-        System.out.println("归一化处理后");
+
+        log.info("归一化处理后");
+//        保存到process列表中，便于存储入数据库
         for (int k = 0; k < pageNum; k++) {
-            System.out.println("网页" + vertices[k] + ":权威值:" + rAuthority[k] + ", 中枢值:" + rHub[k]);
+            Process tempProcess = processList.get(k);
+            tempProcess.setAuthority(rAuthority[k]);
+            tempProcess.setHub(rHub[k]);
+            log.info("网页{}:权威值:{}, 中枢值:{}", vertices[k], rAuthority[k], rHub[k]);
         }
+        log.info("=====================================================");
+        log.info("=====================================================");
+
+        return processList;
     }
 
 }
