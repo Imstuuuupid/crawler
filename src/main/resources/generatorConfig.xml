@@ -5,19 +5,13 @@
 <generatorConfiguration>
     <context id="DB2Tables" targetRuntime="MyBatis3">
         <!-- 生成mysql带有分页的sql的插件  这个可以自己写，-->
-        <plugin type="generator.MysqlPaginationPlugin" />
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
-        <!-- 自定义的注释规则，继承 DefaultCommentGenerator 重写 一些方法 -->
-        <commentGenerator type="generator.NewbatisGenerator">
-            <!-- 是否去除自动生成日期的注释 true：是 ： false:否 -->
-            <property name="suppressDate" value="true"/>
-            <!-- 是否去除所有自动生成的注释 true：是 ： false:否 -->
-            <property name="suppressAllComments" value="true"/>
-        </commentGenerator>
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/crawler"
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/crawler"
                         userId="root"
                         password="123456">
+            <property name = "nullCatalogMeansCurrent" value = "true" />
         </jdbcConnection>
         <!--生成POJO对象-->
         <javaModelGenerator targetPackage="com.xzx.crawler.entity" targetProject="src/main/java">
@@ -29,11 +23,15 @@
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
         <!--生成mapper xml对应dao接口-->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.xzx.crawler.dao"
-                             targetProject="src/main/java">
+        <javaClientGenerator targetPackage="com.xzx.crawler.dao" targetProject="src/main/java" type="XMLMAPPER">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
-        <table tableName="article" domainObjectName="Article">
+
+        <table tableName="article_copy1" domainObjectName="ArticleTest" enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
         </table>
     </context>
 </generatorConfiguration>

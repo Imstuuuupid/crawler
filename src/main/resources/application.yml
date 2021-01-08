@@ -13,8 +13,9 @@ mybatis:
   type-aliases-package: com.xzx.crawler.dao
 
 processor:
-  limit: 20
+  limit: 500
   task-id: 'taskId'
   number: 'count'
   process: 'process'
+
 

@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import us.codecraft.webmagic.Spider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,17 +41,34 @@ public class ArticleTests {
 
     @Test
     public void insert() {
-        Article article = new Article();
-        article.setUrl("www");
-        article.setAuthor("xzx");
-        article.setDesc("test");
-        article.setTitle("22");
-        int insert = articleMapper.insert(article);
-        log.info("{}", insert);
+        Article b = new Article();
+        b.setTitle("bb");
+        b.setAuthor("xzx");
+        b.setUrl("123");
+        b.setAuthority(21d);
+        b.setHub(45d);
+        b.setTaskId(1254234l);
+        b.setDesc("135");
+
+
+        Article a = new Article();
+        a.setTitle("aa");
+        a.setAuthor("xxxx");
+        a.setUrl("qweqwr");
+        a.setAuthority(44d);
+        a.setHub(454d);
+        a.setTaskId(444412545214234l);
+        a.setDesc("222");
+
+        List<Article> list = new ArrayList<>();
+        list.add(b);
+        list.add(a);
+
+        articleMapper.insertList(list);
     }
 
     @Test
-    public void test() {
+    public void start() {
         long startTime, endTime;
         System.out.println("开始爬取...");
         startTime = System.currentTimeMillis();
@@ -60,15 +78,18 @@ public class ArticleTests {
 //                保存路径
                 .addPipeline(articlePipline)
 //                开启线程
-                .thread(3)
+                .thread(10)
                 .run();
         endTime = System.currentTimeMillis();
-        System.out.println("爬取结束，耗时约" + ((endTime - startTime) / 1000) + "秒，抓取了" + processor.getCount() + "条记录");
+        System.out.println((endTime-startTime)/1000);
+        System.out.println("爬取结束，抓取了" + processor.getCount() + "条记录");
+//        获得爬取结果
         List<Process> res = articlePipline.getRes();
-        log.warn("{}", res);
+//        对结果进行节点化
         List<Process> edges = processHandler.findEdges(res);
-        System.out.println("=============================");
+//        使用HITS算法
         List<Process> processes = processHandler.runHits(edges);
-        processes.forEach(a-> System.out.println(a.getTitle()));
+//        写入库中
+        processHandler.insertList(processes);
     }
 }

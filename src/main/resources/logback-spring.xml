@@ -144,7 +144,7 @@
     </root>
 
 <!--    数据库记录用debug输出-->
-    <logger name="com.xzx.crawler.dao" level="debug"/>
+<!--    <logger name="com.xzx.crawler.dao" level="debug"/>-->
 
     <logger name="com.xzx.crawler.algorithm.Hits" level="info" additivity="false">
         <appender-ref ref="HITS_LOG"/>

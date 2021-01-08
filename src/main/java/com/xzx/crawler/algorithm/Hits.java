@@ -2,6 +2,7 @@ package com.xzx.crawler.algorithm;
 
 import com.xzx.crawler.entity.Process;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -41,6 +42,7 @@ public class Hits {
      * 链接矩阵关系
      */
     private int[][] linkMatrix;
+
 
     /**
      * Hits构造方法，构建一个网页数为n的网络
@@ -161,18 +163,17 @@ public class Hits {
 
         log.info("****最终收敛的网页的权威值和中心值****");
         for (int k = 0; k < pageNum; k++) {
+            Process tempProcess = processList.get(k);
+            tempProcess.setAuthority(authority[k]);
+            tempProcess.setHub(hub[k]);
             log.info("网页" + vertices[k] + ":权威值:" + authority[k] + ", 中枢值:" + hub[k]);
         }
 
         log.info("归一化处理后");
 //        保存到process列表中，便于存储入数据库
         for (int k = 0; k < pageNum; k++) {
-            Process tempProcess = processList.get(k);
-            tempProcess.setAuthority(rAuthority[k]);
-            tempProcess.setHub(rHub[k]);
             log.info("网页{}:权威值:{}, 中枢值:{}", vertices[k], rAuthority[k], rHub[k]);
         }
-        log.info("=====================================================");
         log.info("=====================================================");
 
         return processList;

@@ -26,21 +26,7 @@ public class ArticleProcessor implements PageProcessor {
     /**
      * 抓取网站的相关配置，包括编码、抓取间隔、重试次数等
      */
-    private Site site = Site.me().setRetryTimes(3).setSleepTime(100);
-
-    private static int count = 0;
-
-    public int getCount() {
-        return count;
-    }
-
-    private static final String WEBS = "webs";
-
-    /**
-     * 抓取页面的限制边界
-     */
-    @Value("${processor.limit}")
-    private int LIMIT;
+    private Site site = Site.me().setRetryTimes(3).setSleepTime(500);
 
     /**
      * 初始页面抓取元素的xpath路径
@@ -60,12 +46,28 @@ public class ArticleProcessor implements PageProcessor {
     /**
      * 关键词列表
      */
-    private static final List<String> KEY = Lists.newArrayList("mysql", "Mysql", "MYSQL", "数据库");
+    private static final List<String> KEY = Lists.newArrayList("mysql", "Mysql", "MYSQL", "数据库", "sql", "Sql", "SQL", "优化", "查询", "索引");
 
     /**
      * 时间戳标识批次
      */
     private static final Long TASK_ID = System.currentTimeMillis();
+
+
+    private static int count = 0;
+
+    public int getCount() {
+        return count;
+    }
+
+    private static final String WEBS = "webs";
+
+    /**
+     * 抓取页面的限制边界
+     */
+    @Value("${processor.limit}")
+    private int LIMIT;
+
 
     @Value("${processor.number}")
     private String number;
@@ -94,6 +96,7 @@ public class ArticleProcessor implements PageProcessor {
         fetchStrategy(page);
 
     }
+
 
     /**
      * 获取元素
@@ -132,6 +135,7 @@ public class ArticleProcessor implements PageProcessor {
         } else {
             count++;
         }
+
     }
 
     private Boolean contains(String title) {

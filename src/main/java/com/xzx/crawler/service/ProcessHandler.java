@@ -22,12 +22,21 @@ public interface ProcessHandler {
     List<Process> findEdges(List<Process> processList);
 
     /**
-     *
+     * 对所有URL进行HITS算法
      * @author xzx
      * @date 2021/01/04 10:10
      * @param processList
      * @return java.util.List<com.xzx.crawler.entity.Process>
      */
     List<Process> runHits(List<Process> processList);
+
+    /**
+     * 保存到数据库中
+     * @author xzx
+     * @date 2021/01/08 19:49
+     * @param processList
+     * @return void
+     */
+    void insertList(List<Process> processList);
 
 }

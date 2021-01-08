@@ -103,17 +103,24 @@
                     </excludes>
                 </configuration>
             </plugin>
+<!--            找不到驱动：https://blog.csdn.net/qq_32370913/article/details/106575758-->
+            <!--mybatis自动生成代码插件-->
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
-                <version>1.3.5</version>
+                <version>1.3.6</version>
                 <configuration>
-                    <!-- 在控制台打印执行日志 -->
-                    <verbose>true</verbose>
-                    <!-- 重复生成时会覆盖之前的文件-->
+                    <!-- 是否覆盖，true表示会替换生成的JAVA文件，false则不覆盖 -->
                     <overwrite>true</overwrite>
-                    <configurationFile>src/main/resources/generatorConfig.xml</configurationFile>
                 </configuration>
+                <dependencies>
+                    <!--mysql驱动包-->
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>8.0.22</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
