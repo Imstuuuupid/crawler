@@ -68,7 +68,6 @@ public class ArticleProcessor implements PageProcessor {
     @Value("${processor.limit}")
     private int LIMIT;
 
-
     @Value("${processor.number}")
     private String number;
 

@@ -70,9 +70,9 @@ public class ProcessHandlerImpl implements ProcessHandler {
             List<Integer> edges = temp.getEdges();
             for (Integer edge : edges) {
                 try {
-                    hits.addEdge(temp.getCount(),edge);
-                }catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
-                    log.error("{},{}",temp,arrayIndexOutOfBoundsException);
+                    hits.addEdge(temp.getCount(), edge);
+                } catch (ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException) {
+                    log.error("{},{}", temp, arrayIndexOutOfBoundsException);
                 }
             }
         }
@@ -88,7 +88,11 @@ public class ProcessHandlerImpl implements ProcessHandler {
             @Override
             public int compare(Process o1, Process o2) {
                 if (o1 != null && o2 != null) {
-                    if (o1.getAuthority()+o1.getHub() < o2.getAuthority()+o2.getHub()) {
+                    Double o1Hub = o1.getHub() == null ? 0 : o1.getHub();
+                    Double o1Authority = o1.getAuthority() == null ? 0 : o1.getAuthority();
+                    Double o2Hub = o2.getHub() == null ? 0 : o2.getHub();
+                    Double o2Authority = o2.getAuthority() == null ? 0 : o2.getAuthority();
+                    if (o1Authority + o1Hub < o2Authority + o2Hub) {
                         return -1;
                     } else {
                         return 1;
